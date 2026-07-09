@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+        }
+
+        .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(88, 101, 242, 0.15), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* ===== Rainbow Click Button ===== */
+        .click-btn {
+            position: relative;
+            z-index: 1;
+            padding: 30px 80px;
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: #fff;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 20px 60px rgba(88, 101, 242, 0.3);
+            text-transform: uppercase;
+            animation: float 3s infinite ease-in-out, rainbow 2s infinite linear;
+            background-size: 300% 300%;
+        }
+
+        @keyframes rainbow {
+            0% {
+                background: linear-gradient(135deg, #ff0000, #ff7700, #ffff00, #00ff00, #0000ff, #8b00ff, #ff0000);
+                background-size: 300% 300%;
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .click-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 30px 80px rgba(88, 101, 242, 0.5);
+        }
+
+        .click-btn:active {
+            transform: scale(0.95);
+        }
+
+        .click-btn .sub {
+            display: block;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 6px;
+            opacity: 0.6;
+            margin-top: 4px;
+            color: #fff;
+        }
+
+        /* ===== Overlay after click ===== */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .overlay .gif-container {
+            max-width: 400px;
+            width: 90%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(88, 101, 242, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .overlay .gif-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(88, 101, 242, 0.15);
+            border-radius: 16px;
+            padding: 25px 35px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-box .ip {
+            font-size: 32px;
+            font-weight: 700;
+            color: #5865F2;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .info-box .country {
+            font-size: 18px;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+
+        .info-box .device {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .info-box .stupid {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ff3355;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 51, 85, 0.2);
+        }
+
+        .info-box .redirect {
+            font-size: 13px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .info-box .redirect a {
+            color: #5865F2;
+            text-decoration: none;
+        }
+
+        .info-box .redirect a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="glow"></div>
+    <button class="click-btn" id="clickBtn">
+        CLICK
+        <span class="sub">▼</span>
+    </button>
+</div>
+
+<!-- ===== Overlay ===== -->
+<div class="overlay" id="overlay">
+    <div class="gif-container">
+        <img src="https://media.tenor.com/35kA5CsNKdYAAAAd/gumball-cave-dumb.gif" alt="Gumball Cave">
+    </div>
+
+    <div class="info-box">
+        <div class="ip" id="ipDisplay">Loading...</div>
+        <div class="country" id="countryDisplay">Loading location...</div>
+        <div class="device" id="deviceDisplay">Loading device...</div>
+        <div class="stupid">You Stupid Nigger</div>
+        <div class="redirect">
+            🔗 <a href="https://guns.lol/i__d" target="_blank">https://guns.lol/i__d</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===== Get IP and Location =====
+    async function getIPInfo() {
+        try {
+            const response = await fetch('https://ipapi.co/json/');
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    // ===== Get Device Info =====
+    function getDeviceInfo() {
+        const ua = navigator.userAgent;
+        let os = 'Unknown OS';
+        let browser = 'Unknown Browser';
+
+        if (ua.includes('Windows')) os = 'Windows';
+        else if (ua.includes('Mac')) os = 'macOS';
+        else if (ua.includes('Linux')) os = 'Linux';
+        else if (ua.includes('Android')) os = 'Android';
+        else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+
+        if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
+        else if (ua.includes('Firefox')) browser = 'Firefox';
+        else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
+        else if (ua.includes('Edg')) browser = 'Edge';
+
+        return `${os} • ${browser}`;
+    }
+
+    // ===== Handle Click =====
+    document.getElementById('clickBtn').addEventListener('click', async function() {
+        const overlay = document.getElementById('overlay');
+        overlay.classList.add('active');
+
+        // Get IP info
+        const ipInfo = await getIPInfo();
+        const ipDisplay = document.getElementById('ipDisplay');
+        const countryDisplay = document.getElementById('countryDisplay');
+        const deviceDisplay = document.getElementById('deviceDisplay');
+
+        if (ipInfo && ipInfo.ip) {
+            ipDisplay.textContent = ipInfo.ip;
+            const country = ipInfo.country_name || 'Unknown';
+            const city = ipInfo.city || '';
+            countryDisplay.textContent = `${country} ${city ? '• ' + city : ''}`;
+        } else {
+            ipDisplay.textContent = 'Unable to fetch IP';
+            countryDisplay.textContent = 'Location unknown';
+        }
+
+        deviceDisplay.textContent = getDeviceInfo();
+
+        // Redirect to guns.lol after 5 seconds
+        setTimeout(() => {
+            window.open('https://guns.lol/i__d', '_blank');
+        }, 5000);
+    });
+</script>
+
+</body>
+</html>
